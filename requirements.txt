@@ -1,0 +1,13 @@
+langchain
+langchain-openai
+langgraph
+tavily-python
+streamlit
+chromadb
+python-dotenv
+pydantic
+langsmith
+tiktoken
+beautifulsoup4
+lxml
+requests
