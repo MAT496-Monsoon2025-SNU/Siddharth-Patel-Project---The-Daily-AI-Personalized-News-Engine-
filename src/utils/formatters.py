@@ -152,14 +152,17 @@ class ContentFormatter:
             .vintage-columns p {
                 margin-bottom: 1rem;
                 text-indent: 1.5rem;
+                hyphens: auto;
+                -webkit-hyphens: auto;
             }
-            .vintage-columns p:first-child::first-letter {
-                font-size: 4rem;
-                font-weight: bold;
+            .vintage-first-para::first-letter {
+                font-size: 3.5rem;
+                font-weight: 900;
                 float: left;
                 line-height: 0.8;
-                margin: 0.1rem 0.5rem 0 0;
+                margin: 0.1rem 0.5rem 0 -0.5rem;
                 font-family: 'Playfair Display', serif;
+                color: #1a1a1a;
             }
             .vintage-footer {
                 text-align: center;
@@ -373,10 +376,14 @@ class ContentFormatter:
         
         # Format paragraphs for columns
         formatted_text = ""
-        for para in paragraphs:
+        for idx, para in enumerate(paragraphs):
             # Clean up any remaining markdown
             para = para.replace('**', '')
-            formatted_text += f'<p>{para}</p>'
+            
+            if idx == 0:
+                formatted_text += f'<p class="vintage-first-para">{para}</p>'
+            else:
+                formatted_text += f'<p>{para}</p>'
         
         return f"""{css}
 <div class="vintage-page">
