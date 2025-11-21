@@ -315,15 +315,26 @@ class ContentFormatter:
     @staticmethod
     def _format_blog(content: GeneratedContent, css: str) -> str:
         """Format as a beautiful blog post."""
+        import re
+        
+        # Process content
+        text = content.content
+        
+        # Convert markdown bold to HTML
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+        # Convert markdown italic to HTML
+        text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+        
         # Split content into paragraphs
-        paragraphs = [p.strip() for p in content.content.split('\n\n') if p.strip()]
+        paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
         
         # Format paragraphs
         formatted_paragraphs = ""
         for para in paragraphs:
             if para.startswith('#'):
                 # It's a heading
-                formatted_paragraphs += f'<h2 style="color: #667eea; font-size: 1.8rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 700;">{para.lstrip("#").strip()}</h2>'
+                heading_text = para.lstrip("#").strip()
+                formatted_paragraphs += f'<h2 style="color: #667eea; font-size: 1.8rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 700;">{heading_text}</h2>'
             else:
                 formatted_paragraphs += f'<p class="blog-text">{para}</p>'
         
@@ -345,17 +356,26 @@ class ContentFormatter:
     def _format_vintage(content: GeneratedContent, css: str) -> str:
         """Format as an authentic vintage newspaper with columns."""
         from datetime import datetime
+        import re
         
         # Get current date in vintage format
         today = datetime.now()
         vintage_date = today.strftime("%A, %B %d, %Y")
         
+        # Clean and process content
+        text = content.content
+        
+        # Convert markdown bold (**text**) to HTML bold
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+        
         # Split content into paragraphs
-        paragraphs = [p.strip() for p in content.content.split('\n\n') if p.strip() and not p.startswith('#')]
+        paragraphs = [p.strip() for p in text.split('\n\n') if p.strip() and not p.startswith('#')]
         
         # Format paragraphs for columns
         formatted_text = ""
         for para in paragraphs:
+            # Clean up any remaining markdown
+            para = para.replace('**', '')
             formatted_text += f'<p>{para}</p>'
         
         return f"""{css}
@@ -384,8 +404,16 @@ class ContentFormatter:
     @staticmethod
     def _format_professional(content: GeneratedContent, css: str) -> str:
         """Format as a professional report."""
+        import re
+        
+        # Process content
+        text = content.content
+        
+        # Convert markdown bold to HTML
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+        
         # Split content into paragraphs
-        paragraphs = [p.strip() for p in content.content.split('\n\n') if p.strip()]
+        paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
         
         formatted_paragraphs = ""
         for para in paragraphs:
