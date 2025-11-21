@@ -169,10 +169,10 @@ if st.button("🚀 Generate News Story", type="primary", use_container_width=Tru
             if final_state and hasattr(final_state, 'generated_content') and final_state.generated_content:
                 st.success("🎉 Your personalized news story is ready!")
                 
-                # Display the content
+                # Display the content with HTML styling
                 st.divider()
                 formatted_content = content_formatter.format_for_display(final_state.generated_content)
-                st.markdown(formatted_content)
+                st.markdown(formatted_content, unsafe_allow_html=True)
                 
                 # Display sources in an expander
                 with st.expander("📚 View Sources"):
