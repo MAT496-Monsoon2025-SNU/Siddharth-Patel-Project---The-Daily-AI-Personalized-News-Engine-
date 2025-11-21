@@ -155,14 +155,18 @@ if st.button("🚀 Generate News Story", type="primary", use_container_width=Tru
                     status_text.text("✅ Fact-checking...")
                     progress_bar.progress(90)
                 
-                # Get the latest state
-                final_state = list(state.values())[0]
+                # Get the latest state - convert dict to NewsState if needed
+                state_value = list(state.values())[0]
+                if isinstance(state_value, dict):
+                    final_state = NewsState(**state_value)
+                else:
+                    final_state = state_value
             
             progress_bar.progress(100)
             status_text.text("✨ Complete!")
             
             # Display results
-            if final_state and final_state.generated_content:
+            if final_state and hasattr(final_state, 'generated_content') and final_state.generated_content:
                 st.success("🎉 Your personalized news story is ready!")
                 
                 # Display the content
@@ -204,7 +208,7 @@ if st.button("🚀 Generate News Story", type="primary", use_container_width=Tru
                     mime="text/markdown"
                 )
             
-            elif final_state and final_state.error_message:
+            elif final_state and hasattr(final_state, 'error_message') and final_state.error_message:
                 st.error(f"❌ Error: {final_state.error_message}")
             else:
                 st.error("❌ Something went wrong. Please try again.")

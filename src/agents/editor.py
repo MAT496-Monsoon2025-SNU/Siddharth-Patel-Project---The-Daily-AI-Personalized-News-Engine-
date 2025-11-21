@@ -4,7 +4,7 @@ This demonstrates PROMPTING and STRUCTURED OUTPUT.
 """
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from src.config import Config
 from src.state import NewsState, EditorialAngle
 from src.utils.prompts import EDITOR_SYSTEM_PROMPT, EDITOR_USER_PROMPT

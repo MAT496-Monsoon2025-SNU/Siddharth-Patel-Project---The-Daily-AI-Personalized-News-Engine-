@@ -4,7 +4,7 @@ This demonstrates TOOL CALLING and STRUCTURED OUTPUT.
 """
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from src.config import Config
 from src.state import NewsState, ResearchResults, NewsArticle
 from src.tools.tavily_search import tavily_search
