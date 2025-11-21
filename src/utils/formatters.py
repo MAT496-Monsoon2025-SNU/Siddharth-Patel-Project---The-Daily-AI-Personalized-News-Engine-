@@ -441,8 +441,18 @@ class ContentFormatter:
     @staticmethod
     def _format_social_thread(content: GeneratedContent, css: str) -> str:
         """Format as a social media thread."""
+        import re
+        
+        # Process content
+        text = content.content
+        
+        # Convert markdown bold to HTML
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+        # Convert markdown italic to HTML
+        text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+        
         # Split content into thread posts
-        lines = content.content.split('\n')
+        lines = text.split('\n')
         thread_posts = []
         
         for line in lines:
