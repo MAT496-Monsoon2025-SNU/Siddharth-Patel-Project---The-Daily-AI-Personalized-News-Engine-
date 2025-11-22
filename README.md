@@ -173,4 +173,4 @@ For questions or feedback, please open an issue on GitHub.
 
 ---
 
-**Made with ❤️ for MAT496 - Advanced Topics in AI**
+**Made with ❤️ for MAT496 - Introduction to LLMS**
