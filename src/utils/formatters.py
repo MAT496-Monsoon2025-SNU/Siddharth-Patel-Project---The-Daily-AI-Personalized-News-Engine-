@@ -348,15 +348,15 @@ class ContentFormatter:
         
         return f"""{css}
 <div class="blog-container">
-    <div class="blog-content">
-        <div class="blog-title">{content.title}</div>
-        <div class="blog-subtitle">A fresh perspective on today's news</div>
-        {formatted_paragraphs}
-        <div class="blog-meta">
-            <span>📝 {content.word_count} words</span>
-            <span>⏱️ {max(1, content.word_count // 200)} min read</span>
-        </div>
-    </div>
+<div class="blog-content">
+<div class="blog-title">{content.title}</div>
+<div class="blog-subtitle">A fresh perspective on today's news</div>
+{formatted_paragraphs}
+<div class="blog-meta">
+<span>📝 {content.word_count} words</span>
+<span>⏱️ {max(1, content.word_count // 200)} min read</span>
+</div>
+</div>
 </div>
 """
     
@@ -392,24 +392,21 @@ class ContentFormatter:
         
         return f"""{css}
 <div class="vintage-page">
-    <div class="vintage-container">
-        <div class="vintage-masthead">
-            <div class="vintage-paper-name">📰 The Daily AI</div>
-            <div class="vintage-date">{vintage_date} • Price: 5 Cents</div>
-        </div>
-        
-        <div class="vintage-headline">
-            {content.title.upper()}
-        </div>
-        
-        <div class="vintage-columns">
-            {formatted_text}
-        </div>
-        
-        <div class="vintage-footer">
-            Published by The Daily AI Press • {content.word_count} words
-        </div>
-    </div>
+<div class="vintage-container">
+<div class="vintage-masthead">
+<div class="vintage-paper-name">📰 The Daily AI</div>
+<div class="vintage-date">{vintage_date} • Price: 5 Cents</div>
+</div>
+<div class="vintage-headline">
+{content.title.upper()}
+</div>
+<div class="vintage-columns">
+{formatted_text}
+</div>
+<div class="vintage-footer">
+Published by The Daily AI Press • {content.word_count} words
+</div>
+</div>
 </div>
 """
     
@@ -436,17 +433,17 @@ class ContentFormatter:
         
         return f"""{css}
 <div class="professional-container">
-    <div class="professional-content">
-        <div class="professional-header">
-            <div class="professional-title">📊 {content.title}</div>
-            <div class="professional-subtitle">Executive Brief</div>
-        </div>
-        {formatted_paragraphs}
-        <div class="professional-meta">
-            <strong>Document Information</strong><br>
-            Word Count: {content.word_count} | Sources Referenced: {len(content.sources_used)} | Classification: Public
-        </div>
-    </div>
+<div class="professional-content">
+<div class="professional-header">
+<div class="professional-title">📊 {content.title}</div>
+<div class="professional-subtitle">Executive Brief</div>
+</div>
+{formatted_paragraphs}
+<div class="professional-meta">
+<strong>Document Information</strong><br>
+Word Count: {content.word_count} | Sources Referenced: {len(content.sources_used)} | Classification: Public
+</div>
+</div>
 </div>
 """
     
@@ -479,13 +476,13 @@ class ContentFormatter:
         
         return f"""{css}
 <div class="social-container">
-    <div class="social-content">
-        <div class="social-title">🧵 {content.title}</div>
-        {posts_html}
-        <div class="social-meta">
-            💬 Thread length: {len(thread_posts)} posts
-        </div>
-    </div>
+<div class="social-content">
+<div class="social-title">🧵 {content.title}</div>
+{posts_html}
+<div class="social-meta">
+💬 Thread length: {len(thread_posts)} posts
+</div>
+</div>
 </div>
 """
     
