@@ -154,15 +154,20 @@ class ContentFormatter:
                 text-indent: 1.5rem;
                 hyphens: auto;
                 -webkit-hyphens: auto;
+                text-align: justify;
             }
-            .vintage-first-para::first-letter {
-                font-size: 3.5rem;
-                font-weight: 900;
-                float: left;
-                line-height: 0.8;
-                margin: 0.1rem 0.5rem 0 -0.5rem;
-                font-family: 'Playfair Display', serif;
-                color: #1a1a1a;
+            p.vintage-first-para {
+                text-indent: 0 !important;
+            }
+            p.vintage-first-para::first-letter {
+                font-size: 4.5rem !important;
+                font-weight: 900 !important;
+                float: left !important;
+                line-height: 0.8 !important;
+                margin: 0.1rem 0.5rem 0 0 !important;
+                font-family: 'Playfair Display', serif !important;
+                color: #1a1a1a !important;
+                padding-top: 5px;
             }
             .vintage-footer {
                 text-align: center;
