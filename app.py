@@ -83,12 +83,25 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
     
-    /* Card Styling */
-    .css-1r6slb0 {
-        border-radius: 15px;
+    /* Example Pills */
+    .example-pill {
+        display: inline-block;
+        background-color: #f7fafc;
         border: 1px solid #e2e8f0;
-        padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #4a5568;
+        transition: all 0.2s;
+    }
+    
+    .example-pill:hover {
+        background-color: #ebf4ff;
+        border-color: #667eea;
+        color: #5a67d8;
     }
     
     /* Footer Styling */
@@ -99,11 +112,6 @@ st.markdown("""
         border-top: 1px solid #e2e8f0;
         margin-top: 3rem;
         font-size: 0.9rem;
-    }
-    
-    /* Progress Bar */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -138,6 +146,17 @@ with st.sidebar:
     
     st.divider()
     
+    st.header("🎛️ Settings")
+    creativity = st.slider(
+        "Creativity Level",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.7,
+        help="Higher values make the content more creative, lower values make it more factual."
+    )
+    
+    st.divider()
+    
     st.header("📚 About")
     st.markdown("""
     **The Daily AI** uses advanced AI agents to:
@@ -148,26 +167,38 @@ with st.sidebar:
     
     Built with **LangGraph** for MAT496.
     """)
-    
-    st.divider()
-    
-    st.header("🎓 Course Topics Covered")
-    st.markdown("""
-    - ✅ Prompting
-    - ✅ Structured Output
-    - ✅ Semantic Search
-    - ✅ RAG
-    - ✅ Tool Calling
-    - ✅ LangGraph
-    """)
 
 # Main content area
 col1, col2 = st.columns([2, 1], gap="large")
 
 with col1:
     st.markdown("### 🎯 What would you like to read about?")
+    
+    # Example topics
+    example_topics = ["Latest AI Breakthroughs", "SpaceX Starship", "Global Climate Summit", "Premier League Highlights"]
+    
+    # Create columns for example buttons
+    cols = st.columns(len(example_topics))
+    selected_example = None
+    
+    # This is a workaround to make "pill" buttons that update the input
+    # We use session state to track if an example was clicked
+    if 'topic_input' not in st.session_state:
+        st.session_state.topic_input = ""
+        
+    def set_topic(t):
+        st.session_state.topic_input = t
+    
+    # Display example buttons
+    st.markdown('<div style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">Try these:</div>', unsafe_allow_html=True)
+    ex_cols = st.columns(len(example_topics))
+    for i, ex in enumerate(example_topics):
+        if ex_cols[i].button(ex, key=f"ex_{i}", use_container_width=True):
+            st.session_state.topic_input = ex
+
     topic = st.text_input(
         "Enter a news topic",
+        value=st.session_state.topic_input,
         placeholder="e.g., Latest AI developments, Climate summit, SpaceX launch...",
         help="Enter any news topic you're interested in",
         label_visibility="collapsed"
@@ -197,91 +228,84 @@ if st.button("🚀 Generate News Story", type="primary", use_container_width=Tru
     elif not has_openai or not has_tavily:
         st.error("❌ Please configure your API keys in the .env file")
     else:
-        # Create progress indicators
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
         try:
             # Initialize state
-            status_text.markdown("**🔧 Initializing...**")
-            progress_bar.progress(10)
-            
             initial_state = NewsState(
                 topic=topic,
                 format_type=format_type
             )
             
-            # Run the workflow
-            status_text.markdown("**🔍 Researching news articles...**")
-            progress_bar.progress(25)
-            
-            # Execute workflow
-            final_state = None
-            for state in news_workflow.stream(initial_state):
-                # Update progress based on which node completed
-                if "research" in state:
-                    status_text.markdown("**📰 Analyzing research results...**")
-                    progress_bar.progress(40)
-                elif "editor" in state:
-                    status_text.markdown("**📝 Selecting editorial angle...**")
-                    progress_bar.progress(60)
-                elif "journalist" in state:
-                    status_text.markdown("**✍️ Writing content...**")
-                    progress_bar.progress(80)
-                elif "fact_check" in state:
-                    status_text.markdown("**✅ Fact-checking...**")
-                    progress_bar.progress(90)
+            # Use st.status for a better loading experience
+            with st.status("🤖 AI Agents at work...", expanded=True) as status:
+                st.write("🔧 Initializing workflow...")
                 
-                # Get the latest state - convert dict to NewsState if needed
-                state_value = list(state.values())[0]
-                if isinstance(state_value, dict):
-                    final_state = NewsState(**state_value)
-                else:
-                    final_state = state_value
-            
-            progress_bar.progress(100)
-            status_text.markdown("**✨ Complete!**")
+                # Execute workflow
+                final_state = None
+                for state in news_workflow.stream(initial_state):
+                    # Update status based on which node completed
+                    if "research" in state:
+                        st.write("🔍 **Researcher Agent**: Analyzing news sources...")
+                    elif "editor" in state:
+                        st.write("📝 **Editor Agent**: Selecting the best angle...")
+                    elif "journalist" in state:
+                        st.write("✍️ **Journalist Agent**: Drafting the story...")
+                    elif "fact_check" in state:
+                        st.write("✅ **Fact-Checker Agent**: Verifying accuracy...")
+                    
+                    # Get the latest state
+                    state_value = list(state.values())[0]
+                    if isinstance(state_value, dict):
+                        final_state = NewsState(**state_value)
+                    else:
+                        final_state = state_value
+                
+                status.update(label="✨ Story Ready!", state="complete", expanded=False)
             
             # Display results
             if final_state and hasattr(final_state, 'generated_content') and final_state.generated_content:
                 st.success("🎉 Your personalized news story is ready!")
                 
-                # Display the content with HTML styling
-                st.divider()
-                formatted_content = content_formatter.format_for_display(final_state.generated_content)
-                st.markdown(formatted_content, unsafe_allow_html=True)
+                # Use tabs to organize content
+                tab1, tab2, tab3 = st.tabs(["📖 The Story", "🔍 Behind the Scenes", "📥 Download"])
                 
-                # Display sources in an expander
-                with st.expander("📚 View Sources"):
+                with tab1:
+                    formatted_content = content_formatter.format_for_display(final_state.generated_content)
+                    st.markdown(formatted_content, unsafe_allow_html=True)
+                    
+                    # Feedback buttons
+                    st.markdown("---")
+                    st.markdown("### How was this story?")
+                    fb_col1, fb_col2, _ = st.columns([1, 1, 10])
+                    with fb_col1:
+                        st.button("👍 Great")
+                    with fb_col2:
+                        st.button("👎 Needs Work")
+                
+                with tab2:
+                    st.markdown("### 📚 Sources Used")
                     sources_text = content_formatter.format_sources(final_state.generated_content.sources_used)
                     st.markdown(sources_text)
-                
-                # Display fact-check results
-                if final_state.fact_check:
-                    with st.expander("🔍 Fact-Check Results"):
+                    
+                    st.divider()
+                    
+                    st.markdown("### ✅ Fact-Check Report")
+                    if final_state.fact_check:
                         fc = final_state.fact_check
-                        
                         if fc.is_accurate:
-                            st.success(f"✅ Content verified as accurate (Confidence: {fc.confidence_score:.0%})")
+                            st.success(f"Content verified as accurate (Confidence: {fc.confidence_score:.0%})")
                         else:
-                            st.warning(f"⚠️ Some issues detected (Confidence: {fc.confidence_score:.0%})")
+                            st.warning(f"Some issues detected (Confidence: {fc.confidence_score:.0%})")
                         
                         if fc.issues_found:
                             st.markdown("**Issues Found:**")
                             for issue in fc.issues_found:
                                 st.markdown(f"- {issue}")
-                        
-                        if fc.suggestions:
-                            st.markdown("**Suggestions:**")
-                            for suggestion in fc.suggestions:
-                                st.markdown(f"- {suggestion}")
                 
-                # Download button
-                st.divider()
-                col_download, _ = st.columns([1, 2])
-                with col_download:
+                with tab3:
+                    st.markdown("### 📥 Download Story")
+                    st.markdown("Get a copy of your story in Markdown format.")
                     st.download_button(
-                        label="📥 Download as Markdown",
+                        label="Download Markdown File",
                         data=formatted_content,
                         file_name=f"{topic.replace(' ', '_')}.md",
                         mime="text/markdown",
