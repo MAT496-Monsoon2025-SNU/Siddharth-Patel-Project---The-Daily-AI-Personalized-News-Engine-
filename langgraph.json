@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        "."
+    ],
+    "graphs": {
+        "news_workflow": "./src/graph/workflow.py:news_workflow"
+    },
+    "env": ".env"
+}
