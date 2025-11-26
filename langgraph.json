@@ -1,6 +1,6 @@
 {
     "dependencies": [
-        "."
+        "./requirements.txt"
     ],
     "graphs": {
         "news_workflow": "./src/graph/workflow.py:news_workflow"
