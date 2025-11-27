@@ -203,21 +203,16 @@ demonstrating the self-correcting loop that ensures accuracy while maintaining c
 *A sample blog-style output — conversational, engaging, and optimized for readability.*
 
 ![Demo Professional Report](Images/Demo%20Professional%20Report.png)
+![alt text](<Images/Demo Professional Report .png>)
 *A sample professional report — concise, data-focused, and citation-forward for executive audiences.*
 
 ![Download & Share](Images/Download%20Option.png)
 *Download or share your personalized news article*
 
-### Settings & Creativity
-![Settings Panel](Images/Settings.png)
-*Configure format, length, citation verbosity, and delivery options.*
-
 ![Creativity Setting (Highlighted)](Images/Creativity%20Setting.png)
 **Creativity slider — the project's biggest selling point.**  
 *Use this control to scale narrative inventiveness while preserving factual integrity. Higher values produce bolder storytelling and stylistic flair (great for viral/social outputs); lower values prioritize strict adherence to sources and formal tone (best for reports and executive summaries).*
 
-![Export & Sharing](Images/Export%20Options.png)
-*Quick export, publish, and sharing options for generated articles.*
 
 ## 📋 Example Outputs
 
